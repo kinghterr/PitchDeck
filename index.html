@@ -1,0 +1,1740 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Codeon — Учись программировать, играя</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;700;800&family=JetBrains+Mono:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0a0a0f;
+  --bg2: #0f0f1a;
+  --card: #13131f;
+  --border: #1e1e35;
+  --accent: #00ff88;
+  --accent2: #7c3aed;
+  --accent3: #f59e0b;
+  --text: #e8e8f0;
+  --muted: #6b6b8a;
+  --danger: #ff4d6d;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Syne', sans-serif;
+  overflow-x: hidden;
+}
+
+/* Grid overlay */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(0,255,136,.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,255,136,.03) 1px, transparent 1px);
+  background-size: 60px 60px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* NAV */
+nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 48px;
+  background: rgba(10,10,15,.85);
+  backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--border);
+}
+
+.logo {
+  font-family: 'Space Mono', monospace;
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--accent);
+  letter-spacing: -1px;
+}
+.logo span { color: var(--text); }
+
+nav ul {
+  list-style: none;
+  display: flex;
+  gap: 36px;
+}
+nav ul a {
+  color: var(--muted);
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: .5px;
+  transition: color .2s;
+}
+nav ul a:hover { color: var(--accent); }
+
+.nav-cta {
+  background: var(--accent);
+  color: #000 !important;
+  padding: 10px 22px;
+  border-radius: 6px;
+  font-weight: 700 !important;
+  transition: transform .15s, box-shadow .15s !important;
+}
+.nav-cta:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0 24px rgba(0,255,136,.4);
+}
+
+/* HERO */
+.hero {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  padding: 120px 48px 80px;
+  overflow: hidden;
+}
+
+.hero-glow {
+  position: absolute;
+  width: 600px; height: 600px;
+  background: radial-gradient(circle, rgba(0,255,136,.12) 0%, transparent 70%);
+  top: 10%; right: -100px;
+  pointer-events: none;
+  animation: floatGlow 8s ease-in-out infinite;
+}
+.hero-glow2 {
+  position: absolute;
+  width: 400px; height: 400px;
+  background: radial-gradient(circle, rgba(124,58,237,.15) 0%, transparent 70%);
+  bottom: 5%; left: -80px;
+  pointer-events: none;
+  animation: floatGlow 10s ease-in-out infinite reverse;
+}
+
+@keyframes floatGlow {
+  0%,100% { transform: translateY(0); }
+  50% { transform: translateY(-30px); }
+}
+
+.hero-content {
+  position: relative;
+  max-width: 680px;
+  z-index: 1;
+}
+
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(0,255,136,.08);
+  border: 1px solid rgba(0,255,136,.2);
+  padding: 6px 14px;
+  border-radius: 100px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  color: var(--accent);
+  margin-bottom: 28px;
+  animation: fadeInUp .6s ease both;
+}
+.badge-dot {
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  background: var(--accent);
+  animation: pulse 2s infinite;
+}
+@keyframes pulse {
+  0%,100% { opacity: 1; }
+  50% { opacity: .3; }
+}
+
+h1 {
+  font-size: clamp(48px, 6vw, 80px);
+  font-weight: 800;
+  line-height: 1.05;
+  letter-spacing: -2px;
+  margin-bottom: 24px;
+  animation: fadeInUp .6s .1s ease both;
+}
+h1 .green { color: var(--accent); }
+h1 .purple { color: #a78bfa; }
+
+.hero-sub {
+  font-size: 18px;
+  color: var(--muted);
+  line-height: 1.7;
+  margin-bottom: 40px;
+  max-width: 520px;
+  animation: fadeInUp .6s .2s ease both;
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 300;
+}
+
+.hero-actions {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  animation: fadeInUp .6s .3s ease both;
+}
+
+.btn-primary {
+  background: var(--accent);
+  color: #000;
+  padding: 14px 32px;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 15px;
+  text-decoration: none;
+  border: none;
+  cursor: pointer;
+  transition: transform .15s, box-shadow .15s;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.btn-primary:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 0 40px rgba(0,255,136,.4);
+}
+
+.btn-secondary {
+  background: transparent;
+  color: var(--text);
+  padding: 14px 32px;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 15px;
+  text-decoration: none;
+  border: 1px solid var(--border);
+  cursor: pointer;
+  transition: border-color .2s, color .2s;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.btn-secondary:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.hero-stats {
+  display: flex;
+  gap: 40px;
+  margin-top: 56px;
+  animation: fadeInUp .6s .4s ease both;
+}
+.stat-item {}
+.stat-num {
+  font-family: 'Space Mono', monospace;
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--accent);
+}
+.stat-label {
+  font-size: 13px;
+  color: var(--muted);
+  margin-top: 2px;
+}
+
+/* ROADMAP STRIP */
+.roadmap-strip {
+  position: relative;
+  z-index: 1;
+  padding: 28px 48px;
+  background: var(--card);
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  overflow: hidden;
+}
+
+.roadmap-step {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0 20px;
+}
+.step-num {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: var(--accent);
+  background: rgba(0,255,136,.1);
+  border: 1px solid rgba(0,255,136,.2);
+  width: 22px; height: 22px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.step-text {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+  white-space: nowrap;
+}
+.step-arrow {
+  color: var(--muted);
+  font-size: 18px;
+  padding: 0 8px;
+}
+
+/* SECTION COMMON */
+section {
+  position: relative;
+  z-index: 1;
+}
+
+.section-tag {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: var(--accent);
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+}
+
+h2 {
+  font-size: clamp(32px, 4vw, 52px);
+  font-weight: 800;
+  letter-spacing: -1.5px;
+  line-height: 1.1;
+}
+
+/* PROBLEM */
+.problem {
+  padding: 100px 48px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 80px;
+  align-items: center;
+}
+
+.problem-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.prob-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 20px 24px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  transition: border-color .2s;
+}
+.prob-card:hover { border-color: var(--danger); }
+.prob-icon {
+  font-size: 28px;
+  flex-shrink: 0;
+}
+.prob-title { font-size: 16px; font-weight: 700; margin-bottom: 4px; }
+.prob-desc { font-size: 13px; color: var(--muted); line-height: 1.5; }
+
+/* APP PREVIEW */
+.app-section {
+  padding: 80px 48px;
+  background: var(--bg2);
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+
+.app-container {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.section-header {
+  text-align: center;
+  margin-bottom: 56px;
+}
+
+/* MOCK APP */
+.mock-app {
+  background: #0d0d18;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 40px 80px rgba(0,0,0,.6), 0 0 60px rgba(0,255,136,.06);
+}
+
+.mock-topbar {
+  background: #111122;
+  padding: 12px 20px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border-bottom: 1px solid var(--border);
+}
+.mock-dots { display: flex; gap: 6px; }
+.mock-dot {
+  width: 12px; height: 12px;
+  border-radius: 50%;
+}
+.d1 { background: #ff5f57; }
+.d2 { background: #febc2e; }
+.d3 { background: #28c840; }
+.mock-title {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  color: var(--muted);
+  margin-left: 8px;
+}
+.mock-level-badge {
+  margin-left: auto;
+  background: rgba(0,255,136,.1);
+  border: 1px solid rgba(0,255,136,.25);
+  padding: 4px 10px;
+  border-radius: 100px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: var(--accent);
+}
+
+.mock-body {
+  display: grid;
+  grid-template-columns: 260px 1fr 220px;
+  min-height: 480px;
+}
+
+/* Left panel */
+.mock-left {
+  border-right: 1px solid var(--border);
+  padding: 20px;
+}
+.mock-left h4 {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: var(--muted);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-bottom: 16px;
+}
+.mission-list { display: flex; flex-direction: column; gap: 8px; }
+.mission-item {
+  padding: 10px 12px;
+  border-radius: 8px;
+  font-size: 13px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  transition: background .15s;
+}
+.mission-item.active {
+  background: rgba(0,255,136,.1);
+  border: 1px solid rgba(0,255,136,.2);
+  color: var(--accent);
+}
+.mission-item.done {
+  color: var(--muted);
+}
+.mission-item.done .m-icon { color: var(--accent); }
+.mission-item:not(.active):not(.done):hover {
+  background: rgba(255,255,255,.03);
+}
+.m-icon { font-size: 16px; flex-shrink: 0; }
+.m-name { font-weight: 600; }
+.m-pts {
+  margin-left: auto;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  color: var(--accent3);
+}
+
+.xp-bar-wrap {
+  margin-top: 20px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
+}
+.xp-label {
+  display: flex;
+  justify-content: space-between;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: var(--muted);
+  margin-bottom: 8px;
+}
+.xp-bar {
+  height: 6px;
+  background: var(--border);
+  border-radius: 100px;
+  overflow: hidden;
+}
+.xp-fill {
+  height: 100%;
+  width: 67%;
+  background: linear-gradient(90deg, var(--accent), #00ccff);
+  border-radius: 100px;
+  animation: xpGrow 1.5s ease both;
+}
+@keyframes xpGrow {
+  from { width: 0; }
+}
+
+/* Center: code editor */
+.mock-center {
+  display: flex;
+  flex-direction: column;
+}
+
+.mock-task-bar {
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--border);
+  background: rgba(124,58,237,.05);
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+.task-icon { font-size: 22px; flex-shrink: 0; }
+.task-title {
+  font-size: 14px;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+.task-desc {
+  font-size: 12px;
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+.code-editor {
+  flex: 1;
+  padding: 20px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px;
+  line-height: 1.8;
+  position: relative;
+}
+
+.code-line {
+  display: flex;
+  align-items: flex-start;
+}
+.ln {
+  color: var(--border);
+  width: 30px;
+  flex-shrink: 0;
+  user-select: none;
+  font-size: 12px;
+}
+.kw { color: #c792ea; }
+.fn { color: #82aaff; }
+.str { color: #c3e88d; }
+.num { color: #f78c6c; }
+.cm { color: var(--muted); }
+.op { color: #89ddff; }
+.var { color: var(--text); }
+
+.cursor {
+  display: inline-block;
+  width: 2px;
+  height: 14px;
+  background: var(--accent);
+  animation: blink 1s step-end infinite;
+  vertical-align: middle;
+  margin-left: 1px;
+}
+@keyframes blink {
+  0%,100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+.run-bar {
+  padding: 12px 20px;
+  border-top: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.run-btn {
+  background: var(--accent);
+  color: #000;
+  border: none;
+  padding: 8px 20px;
+  border-radius: 6px;
+  font-weight: 700;
+  font-size: 13px;
+  cursor: pointer;
+  font-family: 'Space Mono', monospace;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: box-shadow .2s;
+}
+.run-btn:hover { box-shadow: 0 0 20px rgba(0,255,136,.4); }
+.output-line {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  color: var(--accent);
+}
+
+/* Right panel */
+.mock-right {
+  border-left: 1px solid var(--border);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+.mock-right h4 {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: var(--muted);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+}
+
+.achievement {
+  background: rgba(245,158,11,.06);
+  border: 1px solid rgba(245,158,11,.15);
+  border-radius: 8px;
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  color: var(--accent3);
+  font-weight: 600;
+}
+
+.leaderboard { display: flex; flex-direction: column; gap: 8px; }
+.lb-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  padding: 6px 8px;
+  border-radius: 6px;
+}
+.lb-item.me {
+  background: rgba(0,255,136,.08);
+  border: 1px solid rgba(0,255,136,.15);
+}
+.lb-rank {
+  font-family: 'JetBrains Mono', monospace;
+  color: var(--muted);
+  width: 18px;
+  font-size: 11px;
+}
+.lb-name { flex: 1; font-weight: 600; }
+.lb-pts {
+  font-family: 'JetBrains Mono', monospace;
+  color: var(--accent3);
+  font-size: 11px;
+}
+
+.streak-box {
+  background: rgba(124,58,237,.06);
+  border: 1px solid rgba(124,58,237,.15);
+  border-radius: 8px;
+  padding: 12px;
+}
+.streak-num {
+  font-family: 'Space Mono', monospace;
+  font-size: 32px;
+  font-weight: 700;
+  color: #a78bfa;
+  line-height: 1;
+}
+.streak-label { font-size: 12px; color: var(--muted); margin-top: 4px; }
+
+/* FEATURES */
+.features {
+  padding: 100px 48px;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  margin-top: 56px;
+}
+
+.feat-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 28px;
+  transition: transform .2s, border-color .2s;
+  position: relative;
+  overflow: hidden;
+}
+.feat-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: var(--card-accent, var(--accent));
+  opacity: 0;
+  transition: opacity .2s;
+}
+.feat-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(255,255,255,.1);
+}
+.feat-card:hover::before { opacity: 1; }
+
+.feat-emoji { font-size: 32px; margin-bottom: 16px; }
+.feat-title {
+  font-size: 17px;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+.feat-desc { font-size: 14px; color: var(--muted); line-height: 1.6; }
+
+/* AUDIENCE */
+.audience {
+  padding: 80px 48px;
+  background: var(--bg2);
+  border-top: 1px solid var(--border);
+}
+
+.audience-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 80px;
+  align-items: start;
+}
+
+.audience-cards {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-top: 36px;
+}
+.aud-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 20px;
+  text-align: center;
+  transition: border-color .2s, transform .2s;
+}
+.aud-card:hover {
+  border-color: var(--accent);
+  transform: translateY(-3px);
+}
+.aud-emoji { font-size: 36px; margin-bottom: 12px; }
+.aud-title { font-size: 15px; font-weight: 700; margin-bottom: 6px; }
+.aud-desc { font-size: 12px; color: var(--muted); line-height: 1.5; }
+
+/* MONETIZATION */
+.monetization {
+  padding: 100px 48px;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.mono-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  margin-top: 56px;
+}
+
+.mono-card {
+  border-radius: 14px;
+  padding: 32px;
+  position: relative;
+  overflow: hidden;
+}
+.mono-card.free {
+  background: var(--card);
+  border: 1px solid var(--border);
+}
+.mono-card.premium {
+  background: linear-gradient(135deg, rgba(0,255,136,.08), rgba(0,204,255,.05));
+  border: 1px solid rgba(0,255,136,.25);
+}
+.mono-card.enterprise {
+  background: linear-gradient(135deg, rgba(124,58,237,.1), rgba(167,139,250,.05));
+  border: 1px solid rgba(124,58,237,.3);
+}
+.mono-tag {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+.mono-card.free .mono-tag { color: var(--muted); }
+.mono-card.premium .mono-tag { color: var(--accent); }
+.mono-card.enterprise .mono-tag { color: #a78bfa; }
+
+.mono-price {
+  font-family: 'Space Mono', monospace;
+  font-size: 36px;
+  font-weight: 700;
+  line-height: 1;
+  margin-bottom: 6px;
+}
+.mono-card.free .mono-price { color: var(--text); }
+.mono-card.premium .mono-price { color: var(--accent); }
+.mono-card.enterprise .mono-price { color: #a78bfa; }
+
+.mono-period { font-size: 13px; color: var(--muted); margin-bottom: 20px; }
+
+.mono-features { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+.mono-features li {
+  font-size: 14px;
+  color: var(--muted);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.mono-features li.yes { color: var(--text); }
+.check { color: var(--accent); }
+.cross { color: var(--muted); }
+
+/* WHY */
+.why {
+  padding: 80px 48px;
+  background: var(--bg2);
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+.why-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+.why-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+  margin-top: 56px;
+}
+.why-card {
+  text-align: center;
+  padding: 28px 16px;
+}
+.why-num {
+  font-family: 'Space Mono', monospace;
+  font-size: 48px;
+  font-weight: 700;
+  color: var(--accent);
+  line-height: 1;
+  margin-bottom: 8px;
+}
+.why-label { font-size: 15px; font-weight: 700; margin-bottom: 8px; }
+.why-desc { font-size: 13px; color: var(--muted); line-height: 1.5; }
+
+/* ROADMAP SECTION */
+.roadmap-section {
+  padding: 100px 48px;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.road-timeline {
+  margin-top: 56px;
+  position: relative;
+}
+.road-timeline::before {
+  content: '';
+  position: absolute;
+  left: 20px;
+  top: 0; bottom: 0;
+  width: 2px;
+  background: linear-gradient(to bottom, var(--accent), var(--accent2), transparent);
+}
+
+.road-item {
+  display: flex;
+  gap: 32px;
+  margin-bottom: 40px;
+  padding-left: 60px;
+  position: relative;
+}
+.road-dot {
+  position: absolute;
+  left: 11px;
+  top: 4px;
+  width: 20px; height: 20px;
+  border-radius: 50%;
+  background: var(--bg);
+  border: 2px solid var(--accent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  color: var(--accent);
+}
+.road-item.future .road-dot {
+  border-color: var(--accent2);
+  color: var(--accent2);
+}
+.road-phase {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  color: var(--accent);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+.road-item.future .road-phase { color: var(--accent2); }
+.road-title { font-size: 18px; font-weight: 700; margin-bottom: 8px; }
+.road-points {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.road-points li {
+  background: var(--card);
+  border: 1px solid var(--border);
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 12px;
+  color: var(--muted);
+  font-family: 'JetBrains Mono', monospace;
+}
+
+/* CTA SECTION */
+.cta-section {
+  padding: 120px 48px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.cta-glow {
+  position: absolute;
+  width: 700px; height: 300px;
+  background: radial-gradient(ellipse, rgba(0,255,136,.08) 0%, transparent 70%);
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+.cta-section h2 {
+  font-size: clamp(36px, 5vw, 64px);
+  margin-bottom: 20px;
+}
+.cta-section p {
+  color: var(--muted);
+  font-size: 17px;
+  margin-bottom: 40px;
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 300;
+}
+
+/* FOOTER */
+footer {
+  padding: 40px 48px;
+  border-top: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 13px;
+  color: var(--muted);
+}
+
+/* ANIMATIONS */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Interactive code */
+#code-output { display: none; }
+#code-output.show { display: flex; }
+
+.run-btn:active { transform: scale(0.97); }
+
+/* Tabs */
+.lang-tabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 24px;
+  margin-top: 36px;
+  justify-content: center;
+}
+.lang-tab {
+  padding: 8px 18px;
+  border-radius: 8px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px;
+  color: var(--muted);
+  cursor: pointer;
+  transition: all .15s;
+}
+.lang-tab.active {
+  background: rgba(0,255,136,.1);
+  border-color: rgba(0,255,136,.3);
+  color: var(--accent);
+}
+.lang-tab:hover:not(.active) { border-color: rgba(255,255,255,.1); color: var(--text); }
+
+@media (max-width: 900px) {
+  nav { padding: 14px 20px; }
+  nav ul { display: none; }
+  .hero { padding: 100px 20px 60px; }
+  .problem { grid-template-columns: 1fr; padding: 60px 20px; }
+  .mock-body { grid-template-columns: 1fr; }
+  .mock-left, .mock-right { display: none; }
+  .features-grid { grid-template-columns: 1fr; padding: 0 20px; }
+  .features { padding: 60px 20px; }
+  .audience-inner { grid-template-columns: 1fr; gap: 40px; padding: 60px 20px; }
+  .audience { padding: 0; }
+  .mono-grid { grid-template-columns: 1fr; padding: 0 20px; }
+  .monetization { padding: 60px 20px; }
+  .why-grid { grid-template-columns: repeat(2,1fr); }
+  .why { padding: 60px 20px; }
+  .roadmap-section { padding: 60px 20px; }
+  .cta-section { padding: 80px 20px; }
+  footer { flex-direction: column; gap: 12px; text-align: center; padding: 30px 20px; }
+  .roadmap-strip { flex-wrap: wrap; gap: 12px; padding: 20px; }
+  .hero-stats { gap: 24px; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="logo">Code<span>on</span></div>
+  <ul>
+    <li><a href="#problem">Проблема</a></li>
+    <li><a href="#app">Продукт</a></li>
+    <li><a href="#audience">Аудитория</a></li>
+    <li><a href="#money">Монетизация</a></li>
+    <li><a href="#roadmap">Роадмап</a></li>
+    <li><a href="#cta" class="nav-cta">Попробовать</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-glow"></div>
+  <div class="hero-glow2"></div>
+  <div class="hero-content">
+    <div class="hero-badge">
+      <div class="badge-dot"></div>
+      🚀 Запуск MVP · 2025
+    </div>
+    <h1>
+      Учись<br>
+      <span class="green">программировать</span><br>
+      <span class="purple">играя</span>
+    </h1>
+    <p class="hero-sub">
+      // Игровая платформа для обучения<br>
+      // Python, JS, алгоритмы, веб-разработка
+    </p>
+    <div class="hero-actions">
+      <a href="#app" class="btn-primary">▶ Смотреть демо</a>
+      <a href="#money" class="btn-secondary">💰 Бизнес-модель</a>
+    </div>
+    <div class="hero-stats">
+      <div class="stat-item">
+        <div class="stat-num">4+</div>
+        <div class="stat-label">Направления</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">2x</div>
+        <div class="stat-label">Быстрее учиться</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">100%</div>
+        <div class="stat-label">Практика</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ROADMAP STRIP -->
+<div class="roadmap-strip">
+  <div class="roadmap-step">
+    <div class="step-num">1</div>
+    <div class="step-text">🔍 Найти проблему</div>
+  </div>
+  <div class="step-arrow">→</div>
+  <div class="roadmap-step">
+    <div class="step-num">2</div>
+    <div class="step-text">✅ Проверить</div>
+  </div>
+  <div class="step-arrow">→</div>
+  <div class="roadmap-step">
+    <div class="step-num">3</div>
+    <div class="step-text">📊 Изучить рынок</div>
+  </div>
+  <div class="step-arrow">→</div>
+  <div class="roadmap-step">
+    <div class="step-num">4</div>
+    <div class="step-text">⚙️ Сделать MVP</div>
+  </div>
+  <div class="step-arrow">→</div>
+  <div class="roadmap-step">
+    <div class="step-num">5</div>
+    <div class="step-text">🎤 Pitch Deck</div>
+  </div>
+</div>
+
+<!-- PROBLEM -->
+<section id="problem">
+  <div class="problem">
+    <div>
+      <div class="section-tag">// ПРОБЛЕМА</div>
+      <h2>Почему люди бросают изучение кода?</h2>
+      <p style="color:var(--muted);margin-top:20px;line-height:1.7;font-size:15px;">Миллионы людей хотят войти в IT, но большинство не доходят до конца — теория перегружает, мотивация падает, прогресс незаметен.</p>
+    </div>
+    <div class="problem-cards">
+      <div class="prob-card">
+        <div class="prob-icon">📚</div>
+        <div>
+          <div class="prob-title">Слишком много теории</div>
+          <div class="prob-desc">Часами читать документацию без практики — скучно и неэффективно</div>
+        </div>
+      </div>
+      <div class="prob-card">
+        <div class="prob-icon">🔥</div>
+        <div>
+          <div class="prob-title">Быстрое выгорание</div>
+          <div class="prob-desc">87% новичков бросают обучение в первые 3 месяца из-за отсутствия мотивации</div>
+        </div>
+      </div>
+      <div class="prob-card">
+        <div class="prob-icon">😵</div>
+        <div>
+          <div class="prob-title">Сложный старт</div>
+          <div class="prob-desc">Нет чёткого пути — непонятно с чего начать и куда двигаться</div>
+        </div>
+      </div>
+      <div class="prob-card">
+        <div class="prob-icon">👻</div>
+        <div>
+          <div class="prob-title">Нет обратной связи</div>
+          <div class="prob-desc">Не видно прогресса, непонятно правильно ли ты делаешь</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- APP PREVIEW -->
+<section id="app" class="app-section">
+  <div class="app-container">
+    <div class="section-header">
+      <div class="section-tag">// ПРОДУКТ</div>
+      <h2>Как это выглядит</h2>
+      <p style="color:var(--muted);margin-top:12px;font-size:15px;">Интерактивный редактор кода внутри игровой среды</p>
+
+      <div class="lang-tabs">
+        <button class="lang-tab active" onclick="switchLang('python')">Python</button>
+        <button class="lang-tab" onclick="switchLang('js')">JavaScript</button>
+        <button class="lang-tab" onclick="switchLang('algo')">Алгоритмы</button>
+      </div>
+    </div>
+
+    <div class="mock-app">
+      <div class="mock-topbar">
+        <div class="mock-dots">
+          <div class="mock-dot d1"></div>
+          <div class="mock-dot d2"></div>
+          <div class="mock-dot d3"></div>
+        </div>
+        <div class="mock-title">Codeon — Python · Миссия 3: Управление персонажем</div>
+        <div class="mock-level-badge">⚔️ Уровень 7</div>
+      </div>
+
+      <div class="mock-body">
+        <!-- LEFT -->
+        <div class="mock-left">
+          <h4>Миссии</h4>
+          <div class="mission-list">
+            <div class="mission-item done"><span class="m-icon">✅</span><span class="m-name">Hello, World!</span><span class="m-pts">+10 XP</span></div>
+            <div class="mission-item done"><span class="m-icon">✅</span><span class="m-name">Переменные</span><span class="m-pts">+20 XP</span></div>
+            <div class="mission-item active"><span class="m-icon">⚔️</span><span class="m-name">Условия if/else</span><span class="m-pts">+35 XP</span></div>
+            <div class="mission-item"><span class="m-icon">🔒</span><span class="m-name">Циклы for</span><span class="m-pts">+40 XP</span></div>
+            <div class="mission-item"><span class="m-icon">🔒</span><span class="m-name">Функции</span><span class="m-pts">+60 XP</span></div>
+            <div class="mission-item"><span class="m-icon">🔒</span><span class="m-name">Списки</span><span class="m-pts">+50 XP</span></div>
+            <div class="mission-item"><span class="m-icon">🔒</span><span class="m-name">Словари</span><span class="m-pts">+55 XP</span></div>
+          </div>
+          <div class="xp-bar-wrap">
+            <div class="xp-label"><span>Прогресс</span><span>670 / 1000 XP</span></div>
+            <div class="xp-bar"><div class="xp-fill"></div></div>
+          </div>
+        </div>
+
+        <!-- CENTER -->
+        <div class="mock-center">
+          <div class="mock-task-bar">
+            <div class="task-icon">🗺️</div>
+            <div>
+              <div class="task-title">Миссия: Помоги герою пройти мост</div>
+              <div class="task-desc">Напиши условие: если health > 0 — герой идёт вперёд, иначе — останавливается. Используй if/else.</div>
+            </div>
+          </div>
+          <div class="code-editor" id="code-display">
+            <div class="code-line"><span class="ln">1</span><span class="cm"># Данные персонажа</span></div>
+            <div class="code-line"><span class="ln">2</span><span class="var">hero_name</span> <span class="op">=</span> <span class="str">"Артур"</span></div>
+            <div class="code-line"><span class="ln">3</span><span class="var">health</span> <span class="op">=</span> <span class="num">75</span></div>
+            <div class="code-line"><span class="ln">4</span></div>
+            <div class="code-line"><span class="ln">5</span><span class="cm"># Твой код ниже 👇</span></div>
+            <div class="code-line"><span class="ln">6</span><span class="kw">if</span> <span class="var">health</span> <span class="op">&gt;</span> <span class="num">0</span><span class="op">:</span></div>
+            <div class="code-line"><span class="ln">7</span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="fn">print</span><span class="op">(</span><span class="var">hero_name</span><span class="op">,</span> <span class="str">"идёт вперёд!"</span><span class="op">)</span></div>
+            <div class="code-line"><span class="ln">8</span><span class="kw">else</span><span class="op">:</span></div>
+            <div class="code-line"><span class="ln">9</span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="fn">print</span><span class="op">(</span><span class="str">"Герой пал..."</span><span class="op">)</span><span class="cursor"></span></div>
+          </div>
+          <div class="run-bar">
+            <button class="run-btn" onclick="runCode()">▶ Запустить</button>
+            <span class="output-line" id="code-output">✅ Артур идёт вперёд! &nbsp;+35 XP 🎉</span>
+          </div>
+        </div>
+
+        <!-- RIGHT -->
+        <div class="mock-right">
+          <div>
+            <h4>Достижения</h4>
+            <div class="achievement">🏆 Первая победа!</div>
+          </div>
+          <div>
+            <h4>Топ игроков</h4>
+            <div class="leaderboard">
+              <div class="lb-item"><span class="lb-rank">#1</span><span class="lb-name">alex_dev</span><span class="lb-pts">1240</span></div>
+              <div class="lb-item"><span class="lb-rank">#2</span><span class="lb-name">code_ninja</span><span class="lb-pts">1100</span></div>
+              <div class="lb-item me"><span class="lb-rank">#3</span><span class="lb-name">Ты 👋</span><span class="lb-pts">670</span></div>
+              <div class="lb-item"><span class="lb-rank">#4</span><span class="lb-name">junior99</span><span class="lb-pts">580</span></div>
+            </div>
+          </div>
+          <div>
+            <div class="streak-box">
+              <div class="streak-num">🔥 7</div>
+              <div class="streak-label">дней подряд</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section class="features">
+  <div class="section-tag">// КАК РАБОТАЕТ</div>
+  <h2>Геймификация обучения</h2>
+  <div class="features-grid">
+    <div class="feat-card" style="--card-accent: var(--accent)">
+      <div class="feat-emoji">🎮</div>
+      <div class="feat-title">Уровни и миссии</div>
+      <div class="feat-desc">Каждый урок — это миссия. Проходи уровни, открывай новые темы и следи за прогрессом как в игре.</div>
+    </div>
+    <div class="feat-card" style="--card-accent: #60a5fa">
+      <div class="feat-emoji">💻</div>
+      <div class="feat-title">Код в реальном времени</div>
+      <div class="feat-desc">Пишешь настоящий код прямо в браузере. Никаких установок — просто открой и начни.</div>
+    </div>
+    <div class="feat-card" style="--card-accent: var(--accent3)">
+      <div class="feat-emoji">🏆</div>
+      <div class="feat-title">XP и достижения</div>
+      <div class="feat-desc">Зарабатывай опыт, получай ачивки, соревнуйся с другими учениками в таблице лидеров.</div>
+    </div>
+    <div class="feat-card" style="--card-accent: #f472b6">
+      <div class="feat-emoji">🤖</div>
+      <div class="feat-title">AI-помощник</div>
+      <div class="feat-desc">Застрял? Умный помощник объяснит ошибку и подскажет подсказку — не выдавая ответ.</div>
+    </div>
+    <div class="feat-card" style="--card-accent: #a78bfa">
+      <div class="feat-emoji">👥</div>
+      <div class="feat-title">Командные задания</div>
+      <div class="feat-desc">Решай задачи вместе с другими игроками. Реальный командный опыт ещё до первой работы.</div>
+    </div>
+    <div class="feat-card" style="--card-accent: #34d399">
+      <div class="feat-emoji">📜</div>
+      <div class="feat-title">Сертификаты</div>
+      <div class="feat-desc">По окончании курса — сертификат, который можно добавить в резюме или LinkedIn.</div>
+    </div>
+  </div>
+</section>
+
+<!-- AUDIENCE -->
+<section id="audience" class="audience">
+  <div class="audience-inner">
+    <div>
+      <div class="section-tag">// АУДИТОРИЯ</div>
+      <h2>Кто будет учиться на Codeon?</h2>
+      <p style="color:var(--muted);margin-top:16px;line-height:1.7;font-size:15px;">Платформа создана для всех, кто хочет войти в IT — независимо от возраста и опыта. Фокус на вовлечённость и результат.</p>
+      <div style="margin-top:28px;display:flex;flex-direction:column;gap:12px;">
+        <div style="display:flex;align-items:center;gap:12px;font-size:14px;color:var(--muted)">
+          <span style="color:var(--accent);font-size:18px">→</span>
+          <span>Объём рынка EdTech в 2025: <strong style="color:var(--text)">$400+ млрд</strong></span>
+        </div>
+        <div style="display:flex;align-items:center;gap:12px;font-size:14px;color:var(--muted)">
+          <span style="color:var(--accent);font-size:18px">→</span>
+          <span>Рост сектора: <strong style="color:var(--text)">+16% в год</strong></span>
+        </div>
+        <div style="display:flex;align-items:center;gap:12px;font-size:14px;color:var(--muted)">
+          <span style="color:var(--accent);font-size:18px">→</span>
+          <span>Геймификация в обучении повышает удержание на <strong style="color:var(--text)">60%</strong></span>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="audience-cards">
+        <div class="aud-card">
+          <div class="aud-emoji">🎓</div>
+          <div class="aud-title">Студенты</div>
+          <div class="aud-desc">14–22 года. Хотят навыки для карьеры, привыкли к играм и геймификации</div>
+        </div>
+        <div class="aud-card">
+          <div class="aud-emoji">🚀</div>
+          <div class="aud-title">Новички в IT</div>
+          <div class="aud-desc">Хотят сменить профессию. Нужен понятный путь без перегрузки теорией</div>
+        </div>
+        <div class="aud-card">
+          <div class="aud-emoji">📱</div>
+          <div class="aud-title">Самоучки</div>
+          <div class="aud-desc">Учатся самостоятельно. Ценят гибкость и мгновенную обратную связь</div>
+        </div>
+        <div class="aud-card">
+          <div class="aud-emoji">🏢</div>
+          <div class="aud-title">Компании</div>
+          <div class="aud-desc">B2B сегмент: обучение junior-разработчиков внутри команды</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MONETIZATION -->
+<section id="money" class="monetization">
+  <div class="section-tag">// МОНЕТИЗАЦИЯ</div>
+  <h2>Как зарабатывает Codeon</h2>
+  <p style="color:var(--muted);font-size:15px;margin-top:14px;max-width:700px;line-height:1.7;font-family:'JetBrains Mono',monospace;font-weight:300;">
+    Три независимых потока дохода: реклама в бесплатном тире, подписка на продвинутые уровни и внутриигровая валюта — <span style="color:var(--accent3);font-weight:500;">CodeCoins</span> — которую зарабатываешь в игре и тратишь на контент.
+  </p>
+
+  <!-- УРОВНИ — визуальная схема -->
+  <div style="margin-top:48px;margin-bottom:48px;">
+    <div style="text-align:center;margin-bottom:28px;">
+      <span style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--accent)">// СТРУКТУРА УРОВНЕЙ ПЛАТФОРМЫ</span>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:0;max-width:960px;margin:0 auto;border:1px solid var(--border);border-radius:14px;overflow:hidden;">
+      <!-- Beginner -->
+      <div style="padding:28px 20px;background:var(--card);border-right:1px solid var(--border);position:relative;">
+        <div style="position:absolute;top:0;left:0;right:0;height:3px;background:#4ade80;"></div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:#4ade80;letter-spacing:2px;text-transform:uppercase;margin-bottom:10px;">FREE · Beginner</div>
+        <div style="font-size:20px;font-weight:800;margin-bottom:6px;">Основы</div>
+        <div style="font-size:12px;color:var(--muted);line-height:1.6;margin-bottom:16px;">Что такое код? Переменные, условия, циклы — первое знакомство с программированием без барьеров</div>
+        <div style="display:flex;flex-direction:column;gap:6px;">
+          <div style="font-size:12px;color:var(--text);display:flex;gap:6px;align-items:center;"><span style="color:#4ade80">✓</span> Синтаксис Python / JS</div>
+          <div style="font-size:12px;color:var(--text);display:flex;gap:6px;align-items:center;"><span style="color:#4ade80">✓</span> if / else / loops</div>
+          <div style="font-size:12px;color:var(--text);display:flex;gap:6px;align-items:center;"><span style="color:#4ade80">✓</span> Первые функции</div>
+          <div style="font-size:12px;color:var(--text);display:flex;gap:6px;align-items:center;"><span style="color:#4ade80">✓</span> 20 игровых миссий</div>
+          <div style="font-size:12px;color:var(--text);display:flex;gap:6px;align-items:center;"><span style="color:#4ade80">✓</span> Таблица лидеров</div>
+          <div style="font-size:12px;color:var(--muted);display:flex;gap:6px;align-items:center;"><span>📢</span> Реклама</div>
+        </div>
+        <div style="margin-top:16px;padding:10px;background:rgba(74,222,128,.07);border:1px solid rgba(74,222,128,.15);border-radius:8px;font-family:'JetBrains Mono',monospace;font-size:11px;color:#4ade80;text-align:center;">Бесплатно навсегда</div>
+      </div>
+      <!-- Junior -->
+      <div style="padding:28px 20px;background:rgba(0,255,136,.03);border-right:1px solid var(--border);position:relative;">
+        <div style="position:absolute;top:0;left:0;right:0;height:3px;background:var(--accent);"></div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--accent);letter-spacing:2px;text-transform:uppercase;margin-bottom:10px;">COINS / SUB · Junior</div>
+        <div style="font-size:20px;font-weight:800;margin-bottom:6px;">Практик</div>
+        <div style="font-size:12px;color:var(--muted);line-height:1.6;margin-bottom:16px;">Реальные задачи Junior-уровня: работа с API, массивами, ООП и первые мини-проекты</div>
+        <div style="display:flex;flex-direction:column;gap:6px;">
+          <div style="font-size:12px;color:var(--text);display:flex;gap:6px;align-items:center;"><span style="color:var(--accent)">✓</span> ООП и классы</div>
+          <div style="font-size:12px;color:var(--text);display:flex;gap:6px;align-items:center;"><span style="color:var(--accent)">✓</span> Работа с файлами / API</div>
+          <div style="font-size:12px;color:var(--text);display:flex;gap:6px;align-items:center;"><span style="color:var(--accent)">✓</span> Алгоритмы сортировки</div>
+          <div style="font-size:12px;color:var(--text);display:flex;gap:6px;align-items:center;"><span style="color:var(--accent)">✓</span> Мини-проекты</div>
+          <div style="font-size:12px;color:var(--text);display:flex;gap:6px;align-items:center;"><span style="color:var(--accent)">✓</span> 40 миссий</div>
+        </div>
+        <div style="margin-top:16px;padding:10px;background:rgba(0,255,136,.08);border:1px solid rgba(0,255,136,.2);border-radius:8px;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--accent);text-align:center;">🪙 500 CodeCoins или подписка</div>
+      </div>
+      <!-- Middle -->
+      <div style="padding:28px 20px;background:rgba(245,158,11,.03);border-right:1px solid var(--border);position:relative;">
+        <div style="position:absolute;top:0;left:0;right:0;height:3px;background:var(--accent3);"></div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--accent3);letter-spacing:2px;text-transform:uppercase;margin-bottom:10px;">SUBSCRIPTION · Middle</div>
+        <div style="font-size:20px;font-weight:800;margin-bottom:6px;">Разработчик</div>
+        <div style="font-size:12px;color:var(--muted);line-height:1.6;margin-bottom:16px;">Middle-задачи: архитектура, паттерны, тесты, CI/CD и командная разработка в реальных условиях</div>
+        <div style="display:flex;flex-direction:column;gap:6px;">
+          <div style="font-size:12px;color:var(--text);display:flex;gap:6px;align-items:center;"><span style="color:var(--accent3)">✓</span> Design Patterns</div>
+          <div style="font-size:12px;color:var(--text);display:flex;gap:6px;align-items:center;"><span style="color:var(--accent3)">✓</span> Unit-тесты и TDD</div>
+          <div style="font-size:12px;color:var(--text);display:flex;gap:6px;align-items:center;"><span style="color:var(--accent3)">✓</span> Командные проекты</div>
+          <div style="font-size:12px;color:var(--text);display:flex;gap:6px;align-items:center;"><span style="color:var(--accent3)">✓</span> Code Review симуляция</div>
+          <div style="font-size:12px;color:var(--text);display:flex;gap:6px;align-items:center;"><span style="color:var(--accent3)">✓</span> AI-ментор</div>
+        </div>
+        <div style="margin-top:16px;padding:10px;background:rgba(245,158,11,.08);border:1px solid rgba(245,158,11,.2);border-radius:8px;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--accent3);text-align:center;">Только по подписке · $9/мес</div>
+      </div>
+      <!-- Senior -->
+      <div style="padding:28px 20px;background:rgba(124,58,237,.04);position:relative;">
+        <div style="position:absolute;top:0;left:0;right:0;height:3px;background:#a78bfa;"></div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:#a78bfa;letter-spacing:2px;text-transform:uppercase;margin-bottom:10px;">SUBSCRIPTION · Senior</div>
+        <div style="font-size:20px;font-weight:800;margin-bottom:6px;">Эксперт</div>
+        <div style="font-size:12px;color:var(--muted);line-height:1.6;margin-bottom:16px;">Senior-челленджи: системный дизайн, высоконагруженные системы, собеседования в топ-компании</div>
+        <div style="display:flex;flex-direction:column;gap:6px;">
+          <div style="font-size:12px;color:var(--text);display:flex;gap:6px;align-items:center;"><span style="color:#a78bfa">✓</span> System Design</div>
+          <div style="font-size:12px;color:var(--text);display:flex;gap:6px;align-items:center;"><span style="color:#a78bfa">✓</span> LeetCode-стиль задачи</div>
+          <div style="font-size:12px;color:var(--text);display:flex;gap:6px;align-items:center;"><span style="color:#a78bfa">✓</span> Мок-интервью с AI</div>
+          <div style="font-size:12px;color:var(--text);display:flex;gap:6px;align-items:center;"><span style="color:#a78bfa">✓</span> Сертификат Senior Dev</div>
+          <div style="font-size:12px;color:var(--text);display:flex;gap:6px;align-items:center;"><span style="color:#a78bfa">✓</span> Связь с работодателями</div>
+        </div>
+        <div style="margin-top:16px;padding:10px;background:rgba(124,58,237,.1);border:1px solid rgba(124,58,237,.25);border-radius:8px;font-family:'JetBrains Mono',monospace;font-size:11px;color:#a78bfa;text-align:center;">Только по подписке · $9/мес</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CODECOINS BLOCK -->
+  <div style="background:linear-gradient(135deg,rgba(245,158,11,.07),rgba(0,255,136,.04));border:1px solid rgba(245,158,11,.2);border-radius:16px;padding:36px 40px;margin-bottom:40px;max-width:960px;margin-left:auto;margin-right:auto;">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center;">
+      <div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--accent3);letter-spacing:3px;text-transform:uppercase;margin-bottom:12px;">🪙 ВНУТРИИГРОВАЯ ВАЛЮТА</div>
+        <div style="font-size:28px;font-weight:800;letter-spacing:-1px;margin-bottom:12px;">CodeCoins — зарабатывай <span style="color:var(--accent3)">играя</span></div>
+        <div style="font-size:14px;color:var(--muted);line-height:1.7;">
+          Каждое выполненное задание приносит монеты. Решил задачу с первой попытки — двойные монеты. Серия дней без пропусков — бонус. Накопленные монеты можно потратить на разблокировку продвинутых уровней без подписки — идеально для тех, кто <strong style="color:var(--text)">уже умеет кодить</strong> и хочет сразу пройти сложный контент.
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:12px;">
+        <div style="background:var(--card);border:1px solid var(--border);border-radius:10px;padding:14px 18px;display:flex;align-items:center;gap:14px;">
+          <div style="font-size:24px;">⚡</div>
+          <div>
+            <div style="font-size:13px;font-weight:700;">Задача решена</div>
+            <div style="font-size:12px;color:var(--muted);">Любое задание</div>
+          </div>
+          <div style="margin-left:auto;font-family:'JetBrains Mono',monospace;font-size:14px;color:var(--accent3);font-weight:700;">+10–50 🪙</div>
+        </div>
+        <div style="background:var(--card);border:1px solid var(--border);border-radius:10px;padding:14px 18px;display:flex;align-items:center;gap:14px;">
+          <div style="font-size:24px;">🎯</div>
+          <div>
+            <div style="font-size:13px;font-weight:700;">С первой попытки</div>
+            <div style="font-size:12px;color:var(--muted);">Без ошибок и подсказок</div>
+          </div>
+          <div style="margin-left:auto;font-family:'JetBrains Mono',monospace;font-size:14px;color:var(--accent3);font-weight:700;">×2 🪙</div>
+        </div>
+        <div style="background:var(--card);border:1px solid var(--border);border-radius:10px;padding:14px 18px;display:flex;align-items:center;gap:14px;">
+          <div style="font-size:24px;">🔥</div>
+          <div>
+            <div style="font-size:13px;font-weight:700;">Серия 7 дней</div>
+            <div style="font-size:12px;color:var(--muted);">Daily streak бонус</div>
+          </div>
+          <div style="margin-left:auto;font-family:'JetBrains Mono',monospace;font-size:14px;color:var(--accent3);font-weight:700;">+200 🪙</div>
+        </div>
+        <div style="background:var(--card);border:1px solid var(--border);border-radius:10px;padding:14px 18px;display:flex;align-items:center;gap:14px;">
+          <div style="font-size:24px;">🏆</div>
+          <div>
+            <div style="font-size:13px;font-weight:700;">Топ-3 недели</div>
+            <div style="font-size:12px;color:var(--muted);">Таблица лидеров</div>
+          </div>
+          <div style="margin-left:auto;font-family:'JetBrains Mono',monospace;font-size:14px;color:var(--accent3);font-weight:700;">+500 🪙</div>
+        </div>
+      </div>
+    </div>
+    <div style="margin-top:28px;padding-top:20px;border-top:1px solid rgba(245,158,11,.15);display:grid;grid-template-columns:repeat(3,1fr);gap:16px;text-align:center;">
+      <div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:22px;font-weight:700;color:var(--accent3);">500 🪙</div>
+        <div style="font-size:13px;font-weight:700;margin-top:4px;">Junior-пак</div>
+        <div style="font-size:12px;color:var(--muted);margin-top:3px;">40 задач уровня Junior</div>
+      </div>
+      <div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:22px;font-weight:700;color:var(--accent3);">1200 🪙</div>
+        <div style="font-size:13px;font-weight:700;margin-top:4px;">Отдельные уровни</div>
+        <div style="font-size:12px;color:var(--muted);margin-top:3px;">Конкретные темы без подписки</div>
+      </div>
+      <div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:22px;font-weight:700;color:var(--accent3);">Монеты ≠ $</div>
+        <div style="font-size:13px;font-weight:700;margin-top:4px;">Нельзя купить за деньги</div>
+        <div style="font-size:12px;color:var(--muted);margin-top:3px;">Только через игровой прогресс</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ТАРИФЫ -->
+  <div style="text-align:center;margin-bottom:28px;">
+    <span style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--accent)">// ТАРИФЫ И ПОТОКИ ДОХОДА</span>
+  </div>
+  <div class="mono-grid">
+    <div class="mono-card free">
+      <div style="position:absolute;top:0;left:0;right:0;height:3px;background:#4ade80;border-radius:14px 14px 0 0;"></div>
+      <div class="mono-tag" style="color:#4ade80;">🆓 Beginner · Бесплатно</div>
+      <div class="mono-price" style="color:#4ade80;">$0</div>
+      <div class="mono-period">навсегда · с рекламой</div>
+      <ul class="mono-features">
+        <li class="yes"><span class="check">✓</span> 20 вводных миссий (основы кода)</li>
+        <li class="yes"><span class="check">✓</span> Python и JS — синтаксис, переменные</li>
+        <li class="yes"><span class="check">✓</span> Таблица лидеров и XP</li>
+        <li class="yes"><span class="check">✓</span> Зарабатываешь CodeCoins 🪙</li>
+        <li class="yes"><span class="check">✓</span> Тратишь монеты на Junior-уровни</li>
+        <li style="color:var(--muted);"><span>📢</span> Реклама между уровнями</li>
+        <li><span class="cross">–</span> Middle / Senior задачи</li>
+        <li><span class="cross">–</span> AI-ментор и сертификаты</li>
+      </ul>
+      <div style="margin-top:20px;padding:12px;background:rgba(74,222,128,.05);border:1px solid rgba(74,222,128,.15);border-radius:8px;font-size:12px;color:var(--muted);line-height:1.5;">
+        💡 <strong style="color:#4ade80">Стратегия:</strong> бесплатные пользователи зарабатывают CodeCoins и могут разблокировать Junior-контент, не платя — но реклама монетизирует их трафик
+      </div>
+    </div>
+    <div class="mono-card premium">
+      <div class="mono-tag">⭐ Pro · Middle + Senior</div>
+      <div class="mono-price">$9</div>
+      <div class="mono-period">в месяц · без рекламы · полный доступ</div>
+      <ul class="mono-features">
+        <li class="yes"><span class="check">✓</span> Все уровни: Beginner → Senior</li>
+        <li class="yes"><span class="check">✓</span> Middle-задачи: паттерны, тесты, архитектура</li>
+        <li class="yes"><span class="check">✓</span> Senior: System Design + LeetCode-формат</li>
+        <li class="yes"><span class="check">✓</span> AI-ментор — объясняет ошибки</li>
+        <li class="yes"><span class="check">✓</span> Мок-интервью с AI</li>
+        <li class="yes"><span class="check">✓</span> Сертификаты для резюме</li>
+        <li class="yes"><span class="check">✓</span> Командные проекты</li>
+        <li class="yes"><span class="check">✓</span> Без рекламы</li>
+      </ul>
+      <div style="margin-top:20px;padding:12px;background:rgba(0,255,136,.05);border:1px solid rgba(0,255,136,.15);border-radius:8px;font-size:12px;color:var(--muted);line-height:1.5;">
+        💡 <strong style="color:var(--accent)">Стратегия:</strong> сложный контент Middle/Senior доступен только по подписке — это основной стабильный доход платформы
+      </div>
+    </div>
+    <div class="mono-card enterprise">
+      <div class="mono-tag">🏢 Enterprise · B2B</div>
+      <div class="mono-price">По запросу</div>
+      <div class="mono-period">для компаний · командный доступ</div>
+      <ul class="mono-features">
+        <li class="yes"><span class="check">✓</span> Всё из Pro для всей команды</li>
+        <li class="yes"><span class="check">✓</span> Дашборд прогресса сотрудников</li>
+        <li class="yes"><span class="check">✓</span> Кастомные курсы под стек компании</li>
+        <li class="yes"><span class="check">✓</span> Онбординг junior-разработчиков</li>
+        <li class="yes"><span class="check">✓</span> Связь с HR и работодателями</li>
+        <li class="yes"><span class="check">✓</span> White-label брендирование</li>
+        <li class="yes"><span class="check">✓</span> SLA-поддержка 24/7</li>
+        <li class="yes"><span class="check">✓</span> Аналитика и отчёты</li>
+      </ul>
+      <div style="margin-top:20px;padding:12px;background:rgba(124,58,237,.07);border:1px solid rgba(124,58,237,.2);border-radius:8px;font-size:12px;color:var(--muted);line-height:1.5;">
+        💡 <strong style="color:#a78bfa">Стратегия:</strong> компании платят за обучение своих сотрудников — самый высокий средний чек на платформе
+      </div>
+    </div>
+  </div>
+
+  <!-- 3 потока дохода -->
+  <div style="margin-top:40px;display:grid;grid-template-columns:repeat(3,1fr);gap:16px;max-width:800px;margin-left:auto;margin-right:auto;text-align:center;">
+    <div style="padding:24px 16px;background:var(--card);border:1px solid var(--border);border-radius:12px;">
+      <div style="font-size:28px;margin-bottom:8px;">📢</div>
+      <div style="font-size:14px;font-weight:700;margin-bottom:6px;">Реклама</div>
+      <div style="font-size:12px;color:var(--muted);line-height:1.5;">Пассивный доход с бесплатных пользователей. Чем больше аудитория — тем выше CPM</div>
+    </div>
+    <div style="padding:24px 16px;background:var(--card);border:1px solid var(--border);border-radius:12px;">
+      <div style="font-size:28px;margin-bottom:8px;">🔁</div>
+      <div style="font-size:14px;font-weight:700;margin-bottom:6px;">Подписка $9/мес</div>
+      <div style="font-size:12px;color:var(--muted);line-height:1.5;">Стабильный MRR — основа бизнеса. Middle и Senior уровни — только здесь</div>
+    </div>
+    <div style="padding:24px 16px;background:var(--card);border:1px solid var(--border);border-radius:12px;">
+      <div style="font-size:28px;margin-bottom:8px;">🏢</div>
+      <div style="font-size:14px;font-weight:700;margin-bottom:6px;">B2B лицензии</div>
+      <div style="font-size:12px;color:var(--muted);line-height:1.5;">Корпоративный сегмент с высоким чеком. Онбординг и обучение junior-разработчиков</div>
+    </div>
+  </div>
+</section>
+
+<!-- WHY -->
+<section class="why">
+  <div class="why-inner">
+    <div class="section-tag">// ПОЧЕМУ ЭТО РАБОТАЕТ</div>
+    <h2>Цифры говорят сами</h2>
+    <div class="why-grid">
+      <div class="why-card">
+        <div class="why-num">60%</div>
+        <div class="why-label">Выше удержание</div>
+        <div class="why-desc">Геймификация держит пользователей на платформе дольше</div>
+      </div>
+      <div class="why-card">
+        <div class="why-num">2x</div>
+        <div class="why-label">Быстрее обучение</div>
+        <div class="why-desc">Практика сразу после теории ускоряет усвоение</div>
+      </div>
+      <div class="why-card">
+        <div class="why-num">87%</div>
+        <div class="why-label">Бросают курсы</div>
+        <div class="why-desc">Мы решаем проблему dropout — главную боль EdTech</div>
+      </div>
+      <div class="why-card">
+        <div class="why-num">∞</div>
+        <div class="why-label">Масштабируемость</div>
+        <div class="why-desc">Цифровой продукт — без лимитов на количество пользователей</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ROADMAP -->
+<section id="roadmap" class="roadmap-section">
+  <div class="section-tag">// ПЛАН РАЗВИТИЯ</div>
+  <h2>Что дальше?</h2>
+  <div class="road-timeline">
+    <div class="road-item">
+      <div class="road-dot">✓</div>
+      <div>
+        <div class="road-phase">Фаза 1 · Проблема</div>
+        <div class="road-title">Исследование и валидация</div>
+        <ul class="road-points">
+          <li>Интервью с 50+ пользователями</li>
+          <li>Анализ конкурентов</li>
+          <li>Подтверждение спроса</li>
+        </ul>
+      </div>
+    </div>
+    <div class="road-item">
+      <div class="road-dot">✓</div>
+      <div>
+        <div class="road-phase">Фаза 2 · Рынок</div>
+        <div class="road-title">Изучение рынка</div>
+        <ul class="road-points">
+          <li>Анализ Codecademy, Duolingo</li>
+          <li>Ниша в СНГ</li>
+          <li>Ценообразование</li>
+        </ul>
+      </div>
+    </div>
+    <div class="road-item">
+      <div class="road-dot">→</div>
+      <div>
+        <div class="road-phase">Фаза 3 · MVP</div>
+        <div class="road-title">Минимальный продукт</div>
+        <ul class="road-points">
+          <li>Python-курс 20 уровней</li>
+          <li>Браузерный редактор</li>
+          <li>XP и таблица лидеров</li>
+          <li>Первые 100 пользователей</li>
+        </ul>
+      </div>
+    </div>
+    <div class="road-item future">
+      <div class="road-dot">○</div>
+      <div>
+        <div class="road-phase">Фаза 4 · Рост</div>
+        <div class="road-title">Масштабирование</div>
+        <ul class="road-points">
+          <li>AI-помощник</li>
+          <li>JavaScript и алгоритмы</li>
+          <li>Командные проекты</li>
+          <li>Монетизация Premium</li>
+        </ul>
+      </div>
+    </div>
+    <div class="road-item future">
+      <div class="road-dot">○</div>
+      <div>
+        <div class="road-phase">Фаза 5 · Экосистема</div>
+        <div class="road-title">B2B и работодатели</div>
+        <ul class="road-points">
+          <li>Enterprise-лицензии</li>
+          <li>Связь с HR-компаниями</li>
+          <li>Сертификаты с акредитацией</li>
+          <li>Мобильное приложение</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section id="cta" class="cta-section">
+  <div class="cta-glow"></div>
+  <div class="section-tag">// СТАРТ</div>
+  <h2>Готов учиться <span style="color:var(--accent)">играя?</span></h2>
+  <p>Присоединяйся к Codeon — будущее IT начинается здесь</p>
+  <div style="display:flex;gap:16px;justify-content:center;flex-wrap:wrap;">
+    <a href="#app" class="btn-primary" style="font-size:16px;padding:16px 36px;">🚀 Начать бесплатно</a>
+    <a href="#money" class="btn-secondary" style="font-size:16px;padding:16px 36px;">📊 Бизнес-план</a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="logo">Code<span>on</span></div>
+  <div>© 2025 Codeon · Учись программировать, играя</div>
+  <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--border)">v0.1.0-mvp</div>
+</footer>
+
+<script>
+function runCode() {
+  const out = document.getElementById('code-output');
+  out.classList.add('show');
+  out.style.animation = 'none';
+  out.offsetHeight;
+  out.style.animation = 'fadeInUp .4s ease both';
+}
+
+const codeBlocks = {
+  python: `
+    <div class="code-line"><span class="ln">1</span><span class="cm"># Данные персонажа</span></div>
+    <div class="code-line"><span class="ln">2</span><span class="var">hero_name</span> <span class="op">=</span> <span class="str">"Артур"</span></div>
+    <div class="code-line"><span class="ln">3</span><span class="var">health</span> <span class="op">=</span> <span class="num">75</span></div>
+    <div class="code-line"><span class="ln">4</span></div>
+    <div class="code-line"><span class="ln">5</span><span class="cm"># Твой код ниже 👇</span></div>
+    <div class="code-line"><span class="ln">6</span><span class="kw">if</span> <span class="var">health</span> <span class="op">&gt;</span> <span class="num">0</span><span class="op">:</span></div>
+    <div class="code-line"><span class="ln">7</span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="fn">print</span><span class="op">(</span><span class="var">hero_name</span><span class="op">,</span> <span class="str">"идёт вперёд!"</span><span class="op">)</span></div>
+    <div class="code-line"><span class="ln">8</span><span class="kw">else</span><span class="op">:</span></div>
+    <div class="code-line"><span class="ln">9</span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="fn">print</span><span class="op">(</span><span class="str">"Герой пал..."</span><span class="op">)</span><span class="cursor"></span></div>
+  `,
+  js: `
+    <div class="code-line"><span class="ln">1</span><span class="cm">// Квест: найди сумму массива</span></div>
+    <div class="code-line"><span class="ln">2</span><span class="kw">const</span> <span class="var">coins</span> <span class="op">=</span> <span class="op">[</span><span class="num">10</span><span class="op">,</span> <span class="num">25</span><span class="op">,</span> <span class="num">5</span><span class="op">,</span> <span class="num">40</span><span class="op">]</span><span class="op">;</span></div>
+    <div class="code-line"><span class="ln">3</span></div>
+    <div class="code-line"><span class="ln">4</span><span class="kw">function</span> <span class="fn">countCoins</span><span class="op">(</span><span class="var">arr</span><span class="op">)</span> <span class="op">{</span></div>
+    <div class="code-line"><span class="ln">5</span>&nbsp;&nbsp;<span class="kw">let</span> <span class="var">total</span> <span class="op">=</span> <span class="num">0</span><span class="op">;</span></div>
+    <div class="code-line"><span class="ln">6</span>&nbsp;&nbsp;<span class="kw">for</span> <span class="op">(</span><span class="kw">let</span> <span class="var">coin</span> <span class="kw">of</span> <span class="var">arr</span><span class="op">)</span> <span class="op">{</span></div>
+    <div class="code-line"><span class="ln">7</span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="var">total</span> <span class="op">+=</span> <span class="var">coin</span><span class="op">;</span></div>
+    <div class="code-line"><span class="ln">8</span>&nbsp;&nbsp;<span class="op">}</span></div>
+    <div class="code-line"><span class="ln">9</span>&nbsp;&nbsp;<span class="kw">return</span> <span class="var">total</span><span class="op">;</span></div>
+    <div class="code-line"><span class="ln">10</span><span class="op">}</span><span class="cursor"></span></div>
+  `,
+  algo: `
+    <div class="code-line"><span class="ln">1</span><span class="cm"># Алгоритм: сортировка пузырьком</span></div>
+    <div class="code-line"><span class="ln">2</span><span class="var">dungeon</span> <span class="op">=</span> <span class="op">[</span><span class="num">64</span><span class="op">,</span> <span class="num">34</span><span class="op">,</span> <span class="num">25</span><span class="op">,</span> <span class="num">12</span><span class="op">,</span> <span class="num">22</span><span class="op">]</span></div>
+    <div class="code-line"><span class="ln">3</span></div>
+    <div class="code-line"><span class="ln">4</span><span class="kw">for</span> <span class="var">i</span> <span class="kw">in</span> <span class="fn">range</span><span class="op">(</span><span class="fn">len</span><span class="op">(</span><span class="var">dungeon</span><span class="op">)):</span></div>
+    <div class="code-line"><span class="ln">5</span>&nbsp;&nbsp;<span class="kw">for</span> <span class="var">j</span> <span class="kw">in</span> <span class="fn">range</span><span class="op">(</span><span class="num">0</span><span class="op">,</span> <span class="fn">len</span><span class="op">(</span><span class="var">dungeon</span><span class="op">)-</span><span class="var">i</span><span class="op">-</span><span class="num">1</span><span class="op">):</span></div>
+    <div class="code-line"><span class="ln">6</span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">if</span> <span class="var">dungeon</span><span class="op">[</span><span class="var">j</span><span class="op">]</span> <span class="op">&gt;</span> <span class="var">dungeon</span><span class="op">[</span><span class="var">j</span><span class="op">+</span><span class="num">1</span><span class="op">]:</span></div>
+    <div class="code-line"><span class="ln">7</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="var">dungeon</span><span class="op">[</span><span class="var">j</span><span class="op">],</span> <span class="var">dungeon</span><span class="op">[</span><span class="var">j</span><span class="op">+</span><span class="num">1</span><span class="op">]</span> <span class="op">=</span> <span class="var">dungeon</span><span class="op">[</span><span class="var">j</span><span class="op">+</span><span class="num">1</span><span class="op">],</span> <span class="var">dungeon</span><span class="op">[</span><span class="var">j</span><span class="op">]</span></div>
+    <div class="code-line"><span class="ln">8</span><span class="fn">print</span><span class="op">(</span><span class="var">dungeon</span><span class="op">)</span><span class="cursor"></span></div>
+  `
+};
+
+const outputTexts = {
+  python: '✅ Артур идёт вперёд! &nbsp;+35 XP 🎉',
+  js: '✅ Монет: 80 &nbsp;+40 XP 🎉',
+  algo: '✅ [12, 22, 25, 34, 64] &nbsp;+50 XP 🎉'
+};
+
+const taskDescs = {
+  python: 'Напиши условие: если health > 0 — герой идёт вперёд, иначе — останавливается.',
+  js: 'Напиши функцию countCoins(), которая суммирует все монеты в массиве.',
+  algo: 'Реализуй сортировку пузырьком, чтобы открыть следующий уровень подземелья.'
+};
+
+let currentLang = 'python';
+
+function switchLang(lang) {
+  currentLang = lang;
+  document.querySelectorAll('.lang-tab').forEach(t => t.classList.remove('active'));
+  event.target.classList.add('active');
+  document.getElementById('code-display').innerHTML = codeBlocks[lang];
+  document.getElementById('code-output').classList.remove('show');
+  document.querySelector('.task-desc').textContent = taskDescs[lang];
+}
+
+function runCode() {
+  const out = document.getElementById('code-output');
+  out.innerHTML = outputTexts[currentLang];
+  out.classList.add('show');
+}
+</script>
+</body>
+</html>
